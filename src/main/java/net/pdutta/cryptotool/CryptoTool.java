@@ -37,8 +37,9 @@ public class CryptoTool {
         String digest = "";
         try {
             digest = Utils.sha256sum(filename);
+            log.info("computed checksum for: {}", filename);
         } catch (IOException e) {
-            System.out.println("error: " + e.getMessage());
+            log.error("error computing checksum: {}, {}", e.getMessage(), e.getCause());
         }
         return digest;
     }
@@ -60,6 +61,7 @@ public class CryptoTool {
             outputStream.flush();
             outputStream.close();
             result = true;
+            log.info("encrypted file, wrote: {}", outputFile);
         } catch (IOException | NoSuchElementException e) {
             log.error("error: {}, {}", e.getCause(), e.getMessage());
         }
@@ -83,6 +85,7 @@ public class CryptoTool {
             outputStream.flush();
             outputStream.close();
             result = true;
+            log.info("decrypted file, wrote: {}", outputFile);
         } catch (IOException | NoSuchElementException e) {
             log.error("error: {}, {}", e.getCause(), e.getMessage());
         }
@@ -173,7 +176,7 @@ public class CryptoTool {
             if (header == null || header.length != HEADER_BYTE_LENGTH) {
                 log.error("error reading header");
             } else {
-                log.trace(Utils.byteArray("header", header));
+                // log.trace(Utils.byteArray("header", header));
                 byte[] marker = Arrays.copyOfRange(header, 0, 20);
                 String markerText = new String(marker, StandardCharsets.UTF_8);
                 if (!markerText.equals(HEADER)) {
@@ -181,7 +184,7 @@ public class CryptoTool {
                 }
                 salt = Arrays.copyOfRange(header, 20, 40);
                 assert (salt.length == 20);
-                log.trace(Utils.byteArray("salt", salt));
+                // log.trace(Utils.byteArray("salt", salt));
             }
         } catch (IOException e) {
             log.error("readHeader() failed: {}, {}", e.getMessage(), e.getCause());
