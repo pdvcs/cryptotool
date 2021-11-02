@@ -6,7 +6,7 @@ public class Demo {
 
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Usage: java CryptoTool.App <filename>");
+            System.out.println("Usage: java CryptoTool.Demo <filename>");
         } else {
             try {
                 boolean result = demo(args[0]);
